@@ -35,9 +35,16 @@ all: bin/$(OUTPUT)
 
 -include $(HEADER_DEPS)
 
-bin/$(OUTPUT): linker.lds $(OBJ)
+
+OBJS := \
+	obj/drivers/ports/ports.c.o \
+	obj/drivers/vga_buffer/vga_text.c.o \
+	obj/utils/utils.c.o \
+	obj/kernel.c.o
+
+bin/$(OUTPUT): linker.lds $(OBJS)
 	mkdir -p $$(dirname $@)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
 
 obj/%.c.o: src/%.c
 	mkdir -p $$(dirname $@)

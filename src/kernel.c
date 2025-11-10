@@ -1,7 +1,8 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <limine.h>
-
+#include "../src/drivers/vga_buffer/vga.h"
+#include "utils/utils.h"
 
 __attribute__((used, section(".limine_requests")))
 static struct limine_memmap_request memmap_request = {
@@ -9,11 +10,12 @@ static struct limine_memmap_request memmap_request = {
     .revision = 0
 };
 
-__attribute__((used, section(".limine_requests")))
-static struct limine_framebuffer_request fb_request = {
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0
-};
+//__attribute__((used, section(".limine_requests")))
+//static struct limine_framebuffer_request fb_request = {
+//    .id = LIMINE_FRAMEBUFFER_REQUEST,
+//    .revision = 0
+//};
+
 
 // Forward declaration
 void kmain(void);
@@ -25,17 +27,17 @@ void _start(void) {
     }
 
     // Optional: fill framebuffer with a color
-    if (fb_request.response != NULL && fb_request.response->framebuffer_count > 0) {
-        struct limine_framebuffer* fb = fb_request.response->framebuffers[0];
-
-        uint32_t* framebuffer = (uint32_t*) fb->address;
-        size_t pixels = fb->width * fb->height;
-
-        // Fill screen with blue color (BGR)
-        for (size_t i = 0; i < pixels; i++) {
-            framebuffer[i] = 0xFF0000; // Blue
-        }
-    }
+ //   if (fb_request.response != NULL && fb_request.response->framebuffer_count > 0) {
+  //      struct limine_framebuffer* fb = fb_request.response->framebuffers[0];
+//
+  //      uint32_t* framebuffer = (uint32_t*) fb->address;
+    //    size_t pixels = fb->width * fb->height;
+//
+  //      // Fill screen with blue color (BGR)
+    //    for (size_t i = 0; i < pixels; i++) {
+      //      framebuffer[i] = 0xFF0000; // Blue
+        //}
+    //}
 
     // Call main kernel logic
     kmain();
@@ -45,6 +47,9 @@ void _start(void) {
 }
 
 void kmain(void) {
+     clear_screen();
+     print_string("ZeroNet Kernel Initialized");
+     print_newline();
     // Kernel loop placeholder
     for (;;) __asm__("hlt");
 }
